@@ -46,8 +46,8 @@ RUN apt update
 ##########################################################
 RUN cd mmpose && cp -fv \
 	../kneron-mmpose/configs/hand/2d_kpt_sview_rgb_img/topdown_heatmap/freihand2d/rsn18_freihand2d_224x224.py \
-	configs/hand/2d_kpt_sview_rgb_img/topdown_heatmap/freihand2d \
-	&& chmod +x configs/hand/2d_kpt_sview_rgb_img/topdown_heatmap/freihand2d/rsn18_freihand2d_224x224.py
+	configs/hand/2d_kpt_sview_rgb_img/topdown_heatmap/freihand2d
 RUN cd mmpose && ln -sf ../../docker_mount/data .
+RUN cd kneron-mmpose && ln -sf ../../docker_mount/data .
 RUN sed 's|text, style_config=yapf_style, verify=True|text, style_config=yapf_style|g' -i /opt/conda/lib/python3.8/site-packages/mmcv/utils/config.py || true
 

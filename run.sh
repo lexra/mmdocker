@@ -20,7 +20,7 @@ docker rmi -f $(docker images -a | grep "^${REPOSITORY}" | awk '{print $3}') || 
 ###########################################################
 docker build -t="${REPOSITORY}:vim" .
 docker run --rm -it -v ${DOCKER_MOUNT}:/docker_mount --name mmdocker \
-	--shm-size=8gb \
+	--shm-size=4gb \
 	--gpus all --runtime=nvidia \
 	${REPOSITORY}:vim
 
