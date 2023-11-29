@@ -1,0 +1,11 @@
+chumpy
+dataclasses; python_version == '3.6'
+json_tricks
+matplotlib
+munkres
+opencv-python
+pillow>=8.3.2
+scipy
+torchvision
+xtcocotools>=1.8
+importlib-metadata>=6.6.0
