@@ -18,7 +18,7 @@ ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
 
-RUN apt-get update && apt-get install -y vim curl wget git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-glx \
+RUN apt-get update && apt-get install -y vim curl wget zip git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-glx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -48,6 +48,13 @@ RUN cd mmpose && cp -fv \
 	../kneron-mmpose/configs/hand/2d_kpt_sview_rgb_img/topdown_heatmap/freihand2d/rsn18_freihand2d_224x224.py \
 	configs/hand/2d_kpt_sview_rgb_img/topdown_heatmap/freihand2d
 RUN cd mmpose && ln -sf ../../docker_mount/data .
+
 RUN cd kneron-mmpose && ln -sf ../../docker_mount/data .
+#RUN cd kneron-mmpose && mkdir -p data/freihand data/rhd
+#RUN wget https://download.openmmlab.com/mmpose/datasets/frei_annotations.tar -O kneron-mmpose/data/frei_annotations.tar
+#RUN wget https://lmb.informatik.uni-freiburg.de/data/freihand/FreiHAND_pub_v2.zip -O kneron-mmpose/data/FreiHAND_pub_v2.zip
+#RUN cd kneron-mmpose/data/ && tar xvf frei_annotations.tar -C freihand && unzip -o FreiHAND_pub_v2.zip -d freihand
+
+##########################################################
 RUN sed 's|text, style_config=yapf_style, verify=True|text, style_config=yapf_style|g' -i /opt/conda/lib/python3.8/site-packages/mmcv/utils/config.py || true
 
