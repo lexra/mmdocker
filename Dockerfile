@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y vim curl wget zip git ninja-build libgl
 
 ##########################################################
 # Install xtcocotools
+RUN pip install pip --upgrade
 RUN pip install cython xtcocotools
 
 # Install MMPose
@@ -42,6 +43,7 @@ RUN apt update
 # Install MMCV
 RUN pip install --no-cache-dir --upgrade pip wheel setuptools
 RUN pip install --no-cache-dir mmcv-full==1.5.0 -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7.0/index.html
+RUN sed 's|text, style_config=yapf_style, verify=True|text, style_config=yapf_style|g' -i /opt/conda/lib/python3.8/site-packages/mmcv/utils/config.py || true
 
 ##########################################################
 # kneron-mmpose
@@ -59,5 +61,4 @@ RUN git clone https://github.com/kneron/kneron-mmpose.git
 #RUN cd kneron-mmpose/data && unzip -o RHD_v1-1.zip && unzip -o rhd_annotations.zip -d RHD_published_v2 && ln -sf RHD_published_v2 rhd
 
 ##########################################################
-RUN sed 's|text, style_config=yapf_style, verify=True|text, style_config=yapf_style|g' -i /opt/conda/lib/python3.8/site-packages/mmcv/utils/config.py || true
-
+#RUN git clone https://github.com/ARM-software/ML-zoo.git
