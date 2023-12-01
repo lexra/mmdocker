@@ -26,17 +26,12 @@ RUN apt-get update && apt-get install -y vim curl wget zip git ninja-build libgl
 # Install xtcocotools
 RUN pip install cython xtcocotools
 
-##########################################################
-# Install MMCV
-RUN pip install --no-cache-dir --upgrade pip wheel setuptools
-RUN pip install --no-cache-dir mmcv-full==1.5.0 -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7.0/index.html
-
 # Install MMPose
 RUN conda clean --all
 
 ##########################################################
+# MMPOSE
 ENV FORCE_CUDA="1"
-RUN git clone https://github.com/kneron/kneron-mmpose.git
 RUN git clone https://github.com/open-mmlab/mmpose.git && cd mmpose && git checkout v0.25.1
 RUN cd mmpose && pip install -r requirements/build.txt && pip install --no-cache-dir -e .
 RUN pip install mmengine
@@ -44,16 +39,24 @@ RUN pip install numpy --upgrade
 RUN apt update
 
 ##########################################################
-RUN cd mmpose && cp -fv \
-	../kneron-mmpose/configs/hand/2d_kpt_sview_rgb_img/topdown_heatmap/freihand2d/rsn18_freihand2d_224x224.py \
-	configs/hand/2d_kpt_sview_rgb_img/topdown_heatmap/freihand2d
-RUN cd mmpose && ln -sf ../../docker_mount/data .
+# Install MMCV
+RUN pip install --no-cache-dir --upgrade pip wheel setuptools
+RUN pip install --no-cache-dir mmcv-full==1.5.0 -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7.0/index.html
 
-RUN cd kneron-mmpose && ln -sf ../../docker_mount/data .
-#RUN cd kneron-mmpose && mkdir -p data/freihand data/rhd
+##########################################################
+# kneron-mmpose
+RUN git clone https://github.com/kneron/kneron-mmpose.git
+
+##########################################################
+#RUN cd kneron-mmpose && mkdir -p data/freihand
 #RUN wget https://download.openmmlab.com/mmpose/datasets/frei_annotations.tar -O kneron-mmpose/data/frei_annotations.tar
 #RUN wget https://lmb.informatik.uni-freiburg.de/data/freihand/FreiHAND_pub_v2.zip -O kneron-mmpose/data/FreiHAND_pub_v2.zip
-#RUN cd kneron-mmpose/data/ && tar xvf frei_annotations.tar -C freihand && unzip -o FreiHAND_pub_v2.zip -d freihand
+#RUN cd kneron-mmpose/data && tar xvf frei_annotations.tar -C freihand && unzip -o FreiHAND_pub_v2.zip -d freihand
+
+##########################################################
+#RUN https://lmb.informatik.uni-freiburg.de/data/RenderedHandpose/RHD_v1-1.zip -O kneron-mmpose/data/RHD_v1-1.zip
+#RUN wget https://download.openmmlab.com/mmpose/datasets/rhd_annotations.zip -O kneron-mmpose/data/rhd_annotations.zip
+#RUN cd kneron-mmpose/data && unzip -o RHD_v1-1.zip && unzip -o rhd_annotations.zip -d RHD_published_v2 && ln -sf RHD_published_v2 rhd
 
 ##########################################################
 RUN sed 's|text, style_config=yapf_style, verify=True|text, style_config=yapf_style|g' -i /opt/conda/lib/python3.8/site-packages/mmcv/utils/config.py || true
