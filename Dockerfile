@@ -68,6 +68,6 @@ RUN git clone https://github.com/tesseract-ocr/tesseract.git
 RUN cd tesseract && git checkout 4.0
 RUN git clone https://github.com/tesseract-ocr/langdata_lstm.git
 RUN apt install -y tesseract-ocr libtesseract-dev libicu-dev libpango1.0-dev libcairo2-dev libleptonica-dev
-RUN apt install -y fonts-ubuntu fonts-dejavu-core fonts-dejavu-extra \
-	fonts-noto-color-emoji fonts-noto-cjk fonts-noto-mono fonts-droid-fallback fonts-freefont-ttf
-#RUN cd tesseract && src/training/tesstrain.sh --fonts_dir /usr/share/fonts --lang eng --linedata_only --noextract_font_properties --langdata_dir ../langdata_lstm --tessdata_dir ./tessdata --output_dir ~/tesstutorial/engtrain --fontlist ubuntu dejavu noto droid freefont
+RUN apt install -y fonts-ubuntu fonts-dejavu-core fonts-dejavu-extra fonts-arphic-uming fonts-cwtex-ming \
+	fonts-noto-color-emoji fonts-noto-cjk fonts-noto-mono fonts-droid-fallback fonts-freefont-ttf fonts-cwtex-ming fonts-cwtex-yen
+#RUN cd tesseract && src/training/tesstrain.sh --fonts_dir /usr/share/fonts --lang eng --linedata_only --noextract_font_properties --langdata_dir ../langdata_lstm --tessdata_dir ./tessdata --output_dir ~/tesstutorial/engtrain --fontlist 'FreeMono' 'DejaVu Serif' 'ubuntu' 'AR PL UMing TW Light' 'cwTeXMing Medium' 'cwTeXYen Medium' 'Droid Sans Fallback Regular' --overwrite
