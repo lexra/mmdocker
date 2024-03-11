@@ -29,6 +29,7 @@ RUN git config --global core.compression 0
 # Install xtcocotools
 RUN pip install pip --upgrade
 RUN pip install cython xtcocotools
+RUN pip install gdown==5.1.0
 
 # Install MMPose
 RUN conda clean --all
@@ -53,10 +54,10 @@ RUN sed 's|text, style_config=yapf_style, verify=True|text, style_config=yapf_st
 RUN git clone https://github.com/kneron/kneron-mmpose.git
 
 ##########################################################
-#RUN cd kneron-mmpose && mkdir -p data/freihand
-#RUN wget https://download.openmmlab.com/mmpose/datasets/frei_annotations.tar -O kneron-mmpose/data/frei_annotations.tar
-#RUN wget https://lmb.informatik.uni-freiburg.de/data/freihand/FreiHAND_pub_v2.zip -O kneron-mmpose/data/FreiHAND_pub_v2.zip
-#RUN cd kneron-mmpose/data && tar xvf frei_annotations.tar -C freihand && unzip -o FreiHAND_pub_v2.zip -d freihand
+RUN cd kneron-mmpose && mkdir -p data/freihand
+RUN wget https://download.openmmlab.com/mmpose/datasets/frei_annotations.tar -O kneron-mmpose/data/frei_annotations.tar
+RUN wget https://lmb.informatik.uni-freiburg.de/data/freihand/FreiHAND_pub_v2.zip -O kneron-mmpose/data/FreiHAND_pub_v2.zip
+RUN cd kneron-mmpose/data && tar xvf frei_annotations.tar -C freihand && unzip -o FreiHAND_pub_v2.zip -d freihand
 
 ##########################################################
 #RUN https://lmb.informatik.uni-freiburg.de/data/RenderedHandpose/RHD_v1-1.zip -O kneron-mmpose/data/RHD_v1-1.zip
@@ -82,7 +83,8 @@ RUN pip install trdg
 RUN git clone https://github.com/Belval/TextRecognitionDataGenerator.git
 RUN cd TextRecognitionDataGenerator && pip install --no-cache-dir -e .
 RUN pip install --ignore-installed Pillow==9.3.0
-RUN git clone https://github.com/clovaai/deep-text-recognition-benchmark.git
+#RUN git clone https://github.com/clovaai/deep-text-recognition-benchmark.git
+RUN git clone https://github.com/zihaomu/deep-text-recognition-benchmark.git
 RUN pip install lmdb natsort nltk fire
 RUN cd deep-text-recognition-benchmark && ln -sf ../../docker_mount/data_lmdb_release .
 COPY TPS-ResNet-BiLSTM-Attn.pth deep-text-recognition-benchmark
@@ -103,7 +105,9 @@ RUN pip install onnxruntime==1.5.2
 RUN pip install onnx==1.7.0
 RUN pip install pydantic==1.7
 RUN git clone https://github.com/YIYANGCAI/CRNN-Pytorch2TensorRT-via-ONNX.git
-RUN git clone https://github.com/meijieru/crnn.pytorch
+#RUN git clone https://github.com/meijieru/crnn.pytorch
+RUN git clone https://github.com/Holmeyoung/crnn-pytorch.git
+RUN cd crnn-pytorch && gdown https://drive.google.com/uc?id=1FQgOoqvUvzSGPbxRVL1Bgvl-0AUeHQ8N
 
 ##########################################################
 # crnn
