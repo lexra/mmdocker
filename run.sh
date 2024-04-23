@@ -14,7 +14,7 @@ DOCKER_MOUNT=/work/docker_mount
 
 TAG=mmdocker
 REPOSITORY=lexra/${TAG}
-sudo docker rmi -f $(sudo docker images -a | grep "^${REPOSITORY}" | awk '{print $3}') || true
+sudo docker images -a && sudo docker rmi -f lexra/${TAG} || true
 
 ###########################################################
 # docker run

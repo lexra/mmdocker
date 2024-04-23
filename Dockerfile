@@ -18,7 +18,7 @@ ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
 
-RUN apt-get update && apt-get install -y vim cmake curl wget zip git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-glx \
+RUN apt-get update && apt-get install -y vim cmake curl wget zip git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-glx libopencv-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -131,3 +131,9 @@ RUN cd HybridNets && pip install -r requirements.txt \
 	&& curl --create-dirs -L -o weights/hybridnets.pth https://github.com/datvuthanh/HybridNets/releases/download/v1.0/hybridnets.pth \
 	&& python export.py && rm -rfv weights/hybridnets.pt
 #RUN cd HybridNets && python hybridnets_test.py -w weights/hybridnets.pth --source demo/image --output demo_result --imshow False --imwrite True --float16 True
+
+##########################################################
+# Yolo-Fastest
+RUN git clone https://github.com/HimaxWiseEyePlus/Yolo-Fastest.git && sed 's|^CUDNN_HALF=0|CUDNN_HALF=1|g' -i Yolo-Fastest/Makefile
+RUN cd Yolo-Fastest && git clone https://github.com/HimaxWiseEyePlus/keras-YOLOv3-model-set.git
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/targets/x86_64-linux/lib && export PATH=/usr/local/cuda/bin:$PATH && make -C Yolo-Fastest
