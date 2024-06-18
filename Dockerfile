@@ -12,9 +12,11 @@ RUN mkdir -p /docker_mount
 ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0+PTX"
 ENV TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
 ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
+ENV DEBIAN_FRONTEND=noninteractive
 
 ##########################################################
 # To fix GPG key error when running apt-get update
+RUN apt-key del 7fa2af80
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
 
@@ -101,6 +103,7 @@ RUN pip install scikit-learn --upgrade
 RUN pip install numpy==1.23.5
 RUN pip install protobuf==3.20.3
 RUN pip install TensorRT==8.5.3.1
+#RUN pip uninstall -y albucore
 RUN pip install onnxruntime==1.5.2
 RUN pip install onnx==1.7.0
 RUN pip install pydantic==1.7
@@ -111,16 +114,14 @@ RUN cd crnn-pytorch && gdown https://drive.google.com/uc?id=1FQgOoqvUvzSGPbxRVL1
 
 ##########################################################
 # crnn
-RUN git clone https://github.com/SeanNaren/warp-ctc.git && cd warp-ctc && mkdir build && cd build
-RUN cd warp-ctc && git checkout CMakeLists.txt && sed '35d' -i CMakeLists.txt
-RUN mkdir -p warp-ctc/build && cd warp-ctc/build && cmake .. && make -j8
-RUN cd warp-ctc/pytorch_binding && python setup.py install && cp ../build/libwarpctc.so /opt/conda/lib/
-RUN pip install Levenshtein
-#RUN pip install tensorflow-gpu==2.3.0 scipy==1.4.1 matplotlib==3.4.3 xtcocotools==1.8 torchsummary
-RUN pip install tensorflow==2.13.1 scipy==1.5.0 matplotlib==3.4.3 xtcocotools==1.8 torchsummary onnx-tf==1.9.0
-RUN git clone https://github.com/pbcquoc/crnn.git && cd crnn && sed 's|text = labels\[i\]|text = labels\[0\]|' -i models/utils.py
-#RUN cd crnn && python demo.py --model expr/netCRNN_100.pth --alphabet data/char --img data/18449-2_10-4.jpg
-#RUN cd crnn && python train.py --root data --train train --val test --alphabet char --expr_dir expr
+#RUN git clone https://github.com/SeanNaren/warp-ctc.git && cd warp-ctc && mkdir build && cd build
+#RUN cd warp-ctc && git checkout CMakeLists.txt && sed '35d' -i CMakeLists.txt
+#RUN mkdir -p warp-ctc/build && cd warp-ctc/build && cmake .. && make -j8
+#RUN cd warp-ctc/pytorch_binding && python setup.py install && cp ../build/libwarpctc.so /opt/conda/lib/
+#RUN pip install Levenshtein
+#RUN pip install tensorflow==2.13.1 scipy==1.5.0 matplotlib==3.4.3 xtcocotools==1.8 torchsummary onnx-tf==1.9.0
+#RUN git clone https://github.com/pbcquoc/crnn.git
+##RUN cd crnn && sed 's|text = labels\[i\]|text = labels\[0\]|' -i models/utils.py
 
 ##########################################################
 # HybridNets
@@ -128,8 +129,10 @@ RUN git clone https://github.com/datvuthanh/HybridNets.git
 COPY HybridNets/export-hybridnets.py HybridNets/export.py
 COPY HybridNets/requirements-hybridnets.txt HybridNets/requirements.txt
 RUN cd HybridNets && pip install -r requirements.txt \
-	&& curl --create-dirs -L -o weights/hybridnets.pth https://github.com/datvuthanh/HybridNets/releases/download/v1.0/hybridnets.pth \
-	&& python export.py && rm -rfv weights/hybridnets.pt
+	&& curl --create-dirs -L -o weights/hybridnets.pth https://github.com/datvuthanh/HybridNets/releases/download/v1.0/hybridnets.pth
+RUN pip3 uninstall -y albucore
+RUN pip install numpy==1.23.5
+RUN cd HybridNets && python export.py && rm -rfv weights/hybridnets.pt
 #RUN cd HybridNets && python hybridnets_test.py -w weights/hybridnets.pth --source demo/image --output demo_result --imshow False --imwrite True --float16 True
 
 ##########################################################
