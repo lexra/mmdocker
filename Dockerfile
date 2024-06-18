@@ -103,7 +103,6 @@ RUN pip install scikit-learn --upgrade
 RUN pip install numpy==1.23.5
 RUN pip install protobuf==3.20.3
 RUN pip install TensorRT==8.5.3.1
-#RUN pip uninstall -y albucore
 RUN pip install onnxruntime==1.5.2
 RUN pip install onnx==1.7.0
 RUN pip install pydantic==1.7
