@@ -83,6 +83,7 @@ RUN apt install -y fonts-ubuntu fonts-dejavu-core fonts-dejavu-extra fonts-arphi
 # deep-text-recognition-benchmark
 RUN pip install trdg
 RUN git clone https://github.com/Belval/TextRecognitionDataGenerator.git
+COPY TextRecognitionDataGenerator/setup.py TextRecognitionDataGenerator/
 RUN cd TextRecognitionDataGenerator && pip install --no-cache-dir -e .
 RUN pip install --ignore-installed Pillow==9.3.0
 #RUN git clone https://github.com/clovaai/deep-text-recognition-benchmark.git
@@ -102,12 +103,11 @@ RUN pip install scikit-learn --upgrade
 # crnn.pytorch
 RUN pip install numpy==1.23.5
 RUN pip install protobuf==3.20.3
-RUN pip install TensorRT==8.5.3.1
 RUN pip install onnxruntime==1.5.2
 RUN pip install onnx==1.7.0
 RUN pip install pydantic==1.7
+RUN pip install TensorRT==8.5.3.1
 RUN git clone https://github.com/YIYANGCAI/CRNN-Pytorch2TensorRT-via-ONNX.git
-#RUN git clone https://github.com/meijieru/crnn.pytorch
 RUN git clone https://github.com/Holmeyoung/crnn-pytorch.git
 RUN cd crnn-pytorch && gdown https://drive.google.com/uc?id=1FQgOoqvUvzSGPbxRVL1Bgvl-0AUeHQ8N
 
